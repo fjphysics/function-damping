@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阻尼振动曲线</title>
+    <script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>    
+</head>
+<body>
+
+<h1>阻尼振动曲线</h1>
+<div>
+    <label for="damping"><strong>阻尼系数 (<i>β</i>)：</strong></label>
+    <input type="range" id="damping" min="0" max="6" step="0.1" value="0.2">
+    <span id="damping-value">0.2</span>
+    <span id="omega0"><strong>固有角频率 (<i>ω</i><sub>0</sub>)：6</strong></span>
+</div>
+<div id="plot"></div>
+<div>
+    <strong>函数表达式：</strong>
+    <span id="fn-content"></span>
+</div>
+
+<script>
+    const plotElement = document.getElementById('plot');
+    const dampingInput = document.getElementById('damping');
+    const dampingValueDisplay = document.getElementById('damping-value');
+    const fnContentDisplay = document.getElementById('fn-content');
+ 
+    function drawPlot(damping) {
+        const dampingCoefficient = parseFloat(damping);
+        const omega = Math.sqrt(36-dampingCoefficient*dampingCoefficient);
+        const fn = `exp(-${dampingCoefficient}*x)*cos(${omega}*x)`;
+
+        functionPlot({
+            target: plotElement,
+            data: [{
+                fn: fn,
+                color: 'red',
+            }],
+            xAxis: { domain: [0, 10] },
+            yAxis: { domain: [-1, 1] },            
+            height: 400,
+            grid: true,
+            strokeWidth: 20,
+            disableZoom: true
+        });
+
+        fnContentDisplay.textContent = fn;
+    }
+
+    dampingInput.addEventListener('input', (event) => {
+        const damping = event.target.value;
+        dampingValueDisplay.textContent = parseFloat(damping).toFixed(1);
+        drawPlot(damping);
+    });
+
+    // 初始绘制
+    drawPlot(dampingInput.value);
+</script>
+
+</body>
+</html>
