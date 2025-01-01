@@ -29,20 +29,19 @@
  
     function drawPlot(damping) {
         const dampingCoefficient = parseFloat(damping);
-        const omega = Math.sqrt(36-dampingCoefficient*dampingCoefficient);
+        const omega = Math.sqrt(36-dampingCoefficient*dampingCoefficient).toFixed(2);
         const fn = `exp(-${dampingCoefficient}*x)*cos(${omega}*x)`;
 
         functionPlot({
             target: plotElement,
             data: [{
-                fn: fn,
-                color: 'red',
+                fn: fn
             }],
             xAxis: { domain: [0, 10] },
             yAxis: { domain: [-1, 1] },            
             height: 400,
             grid: true,
-            strokeWidth: 20,
+            strokeWidth: 5,
             disableZoom: true
         });
 
